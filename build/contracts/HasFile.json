@@ -1,0 +1,993 @@
+{
+  "contractName": "HasFile",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFilename",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "filename",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFullFile",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "fileContents",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFileChunksTotal",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "count",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getFileChunk",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getFileChunk\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFileChunksTotal\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"count\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFilename\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"filename\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"getFullFile\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"fileContents\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Fully On-Chain File Access Interface -- Single file per token variant Interface for contracts which expose a single file for each of their tokens. Originally created for the NonagonCup.\",\"kind\":\"dev\",\"methods\":{\"getFileChunk(uint256,uint256)\":{\"details\":\"Use repeated calls to getFileChunk to get the binary data for the file.  -- Size of returned data for each fileChunk must be no more than 1024 bytes.  -- First fileChunk should be the file header, if the file format has one.\"},\"getFileChunksTotal(uint256)\":{\"details\":\"Each file has zero or more fileChunks.\"},\"getFilename(uint256)\":{\"details\":\"Each file must have a filename including the file extension, for example:  \\\"my-file-1.stl\\\" If the contract is an NFT where the object of the NFT is the exposed files then the filenames within the contract must be unique and must include the tokenId that they belong to.\"},\"getFullFile(uint256)\":{\"details\":\"Single call to get the full file contents. NB: This may not work in all conditions due to gas limits, it is instead recommended to call getFileChunksTotal and iterate calls to getFileChunk.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/ivyroot/HasFile.sol\":\"HasFile\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/ivyroot/HasFile.sol\":{\"keccak256\":\"0x64e26f385adf0fd6740bdeec771177b3363c8b26b27a338e301cb1b42eeced7b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f0af18d079bec5c85dfc496dd9063e6a8330d964896a825e857137f4b67070de\",\"dweb:/ipfs/QmZZyLtRekhiCPVWck49LkoEcMFkFyTrBvGog9tzjLBfhr\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\n/**\n * @dev Fully On-Chain File Access Interface -- Single file per token variant\n * Interface for contracts which expose a single file for each of their tokens.\n * Originally created for the NonagonCup.\n */\n interface HasFile {\n\n   /**\n    * @dev Each file must have a filename including the file extension, for example:  \"my-file-1.stl\"\n    * If the contract is an NFT where the object of the NFT is the exposed files then the filenames\n    * within the contract must be unique and must include the tokenId that they belong to.\n    */\n   function getFilename(uint256 tokenId) external view returns(string memory filename);\n\n   /**\n    * @dev Single call to get the full file contents.\n    * NB: This may not work in all conditions due to gas limits, it is instead\n    * recommended to call getFileChunksTotal and iterate calls to getFileChunk.\n    */\n   function getFullFile(uint256 tokenId) external view returns(bytes memory fileContents);\n\n\n   /**\n    * @dev Each file has zero or more fileChunks.\n    */\n   function getFileChunksTotal(uint256 tokenId) external view returns(uint256 count);\n\n\n   /**\n    * @dev Use repeated calls to getFileChunk to get the binary data for the file.\n    *  -- Size of returned data for each fileChunk must be no more than 1024 bytes.\n    *  -- First fileChunk should be the file header, if the file format has one.\n    */\n   function getFileChunk(uint256 tokenId, uint256 index) external view returns(bytes memory data);\n\n }\n",
+  "sourcePath": "/Users/jacob/Code/ivyroot/nonagon-cup/contracts/ivyroot/HasFile.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/ivyroot/HasFile.sol",
+    "exportedSymbols": {
+      "HasFile": [
+        70
+      ]
+    },
+    "id": 71,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 34,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 35,
+          "nodeType": "StructuredDocumentation",
+          "src": "58:207:1",
+          "text": " @dev Fully On-Chain File Access Interface -- Single file per token variant\n Interface for contracts which expose a single file for each of their tokens.\n Originally created for the NonagonCup."
+        },
+        "fullyImplemented": false,
+        "id": 70,
+        "linearizedBaseContracts": [
+          70
+        ],
+        "name": "HasFile",
+        "nameLocation": "277:7:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 36,
+              "nodeType": "StructuredDocumentation",
+              "src": "291:303:1",
+              "text": " @dev Each file must have a filename including the file extension, for example:  \"my-file-1.stl\"\n If the contract is an NFT where the object of the NFT is the exposed files then the filenames\n within the contract must be unique and must include the tokenId that they belong to."
+            },
+            "functionSelector": "e901185e",
+            "id": 43,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFilename",
+            "nameLocation": "607:11:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 39,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 38,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "627:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43,
+                  "src": "619:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 37,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "619:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "618:17:1"
+            },
+            "returnParameters": {
+              "id": 42,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 41,
+                  "mutability": "mutable",
+                  "name": "filename",
+                  "nameLocation": "672:8:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43,
+                  "src": "658:22:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 40,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "658:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "657:24:1"
+            },
+            "scope": 70,
+            "src": "598:84:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 44,
+              "nodeType": "StructuredDocumentation",
+              "src": "687:223:1",
+              "text": " @dev Single call to get the full file contents.\n NB: This may not work in all conditions due to gas limits, it is instead\n recommended to call getFileChunksTotal and iterate calls to getFileChunk."
+            },
+            "functionSelector": "b42587f5",
+            "id": 51,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFullFile",
+            "nameLocation": "923:11:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 47,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 46,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "943:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "935:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 45,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "935:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "934:17:1"
+            },
+            "returnParameters": {
+              "id": 50,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 49,
+                  "mutability": "mutable",
+                  "name": "fileContents",
+                  "nameLocation": "987:12:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "974:25:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 48,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "974:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "973:27:1"
+            },
+            "scope": 70,
+            "src": "914:87:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 52,
+              "nodeType": "StructuredDocumentation",
+              "src": "1007:60:1",
+              "text": " @dev Each file has zero or more fileChunks."
+            },
+            "functionSelector": "f25a01cf",
+            "id": 59,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFileChunksTotal",
+            "nameLocation": "1080:18:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 55,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 54,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1107:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 59,
+                  "src": "1099:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 53,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1099:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1098:17:1"
+            },
+            "returnParameters": {
+              "id": 58,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 57,
+                  "mutability": "mutable",
+                  "name": "count",
+                  "nameLocation": "1146:5:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 59,
+                  "src": "1138:13:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 56,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1138:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1137:15:1"
+            },
+            "scope": 70,
+            "src": "1071:82:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 60,
+              "nodeType": "StructuredDocumentation",
+              "src": "1159:258:1",
+              "text": " @dev Use repeated calls to getFileChunk to get the binary data for the file.\n  -- Size of returned data for each fileChunk must be no more than 1024 bytes.\n  -- First fileChunk should be the file header, if the file format has one."
+            },
+            "functionSelector": "02c0cd81",
+            "id": 69,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFileChunk",
+            "nameLocation": "1430:12:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 65,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 62,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1451:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1443:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 61,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1443:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 64,
+                  "mutability": "mutable",
+                  "name": "index",
+                  "nameLocation": "1468:5:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1460:13:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 63,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1460:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1442:32:1"
+            },
+            "returnParameters": {
+              "id": 68,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 67,
+                  "mutability": "mutable",
+                  "name": "data",
+                  "nameLocation": "1510:4:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1497:17:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 66,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1497:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1496:19:1"
+            },
+            "scope": 70,
+            "src": "1421:95:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 71,
+        "src": "267:1253:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1488:1"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/ivyroot/HasFile.sol",
+    "exportedSymbols": {
+      "HasFile": [
+        70
+      ]
+    },
+    "id": 71,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 34,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 35,
+          "nodeType": "StructuredDocumentation",
+          "src": "58:207:1",
+          "text": " @dev Fully On-Chain File Access Interface -- Single file per token variant\n Interface for contracts which expose a single file for each of their tokens.\n Originally created for the NonagonCup."
+        },
+        "fullyImplemented": false,
+        "id": 70,
+        "linearizedBaseContracts": [
+          70
+        ],
+        "name": "HasFile",
+        "nameLocation": "277:7:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 36,
+              "nodeType": "StructuredDocumentation",
+              "src": "291:303:1",
+              "text": " @dev Each file must have a filename including the file extension, for example:  \"my-file-1.stl\"\n If the contract is an NFT where the object of the NFT is the exposed files then the filenames\n within the contract must be unique and must include the tokenId that they belong to."
+            },
+            "functionSelector": "e901185e",
+            "id": 43,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFilename",
+            "nameLocation": "607:11:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 39,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 38,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "627:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43,
+                  "src": "619:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 37,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "619:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "618:17:1"
+            },
+            "returnParameters": {
+              "id": 42,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 41,
+                  "mutability": "mutable",
+                  "name": "filename",
+                  "nameLocation": "672:8:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43,
+                  "src": "658:22:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 40,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "658:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "657:24:1"
+            },
+            "scope": 70,
+            "src": "598:84:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 44,
+              "nodeType": "StructuredDocumentation",
+              "src": "687:223:1",
+              "text": " @dev Single call to get the full file contents.\n NB: This may not work in all conditions due to gas limits, it is instead\n recommended to call getFileChunksTotal and iterate calls to getFileChunk."
+            },
+            "functionSelector": "b42587f5",
+            "id": 51,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFullFile",
+            "nameLocation": "923:11:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 47,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 46,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "943:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "935:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 45,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "935:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "934:17:1"
+            },
+            "returnParameters": {
+              "id": 50,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 49,
+                  "mutability": "mutable",
+                  "name": "fileContents",
+                  "nameLocation": "987:12:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "974:25:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 48,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "974:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "973:27:1"
+            },
+            "scope": 70,
+            "src": "914:87:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 52,
+              "nodeType": "StructuredDocumentation",
+              "src": "1007:60:1",
+              "text": " @dev Each file has zero or more fileChunks."
+            },
+            "functionSelector": "f25a01cf",
+            "id": 59,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFileChunksTotal",
+            "nameLocation": "1080:18:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 55,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 54,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1107:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 59,
+                  "src": "1099:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 53,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1099:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1098:17:1"
+            },
+            "returnParameters": {
+              "id": 58,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 57,
+                  "mutability": "mutable",
+                  "name": "count",
+                  "nameLocation": "1146:5:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 59,
+                  "src": "1138:13:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 56,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1138:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1137:15:1"
+            },
+            "scope": 70,
+            "src": "1071:82:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 60,
+              "nodeType": "StructuredDocumentation",
+              "src": "1159:258:1",
+              "text": " @dev Use repeated calls to getFileChunk to get the binary data for the file.\n  -- Size of returned data for each fileChunk must be no more than 1024 bytes.\n  -- First fileChunk should be the file header, if the file format has one."
+            },
+            "functionSelector": "02c0cd81",
+            "id": 69,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFileChunk",
+            "nameLocation": "1430:12:1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 65,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 62,
+                  "mutability": "mutable",
+                  "name": "tokenId",
+                  "nameLocation": "1451:7:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1443:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 61,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1443:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 64,
+                  "mutability": "mutable",
+                  "name": "index",
+                  "nameLocation": "1468:5:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1460:13:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 63,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1460:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1442:32:1"
+            },
+            "returnParameters": {
+              "id": 68,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 67,
+                  "mutability": "mutable",
+                  "name": "data",
+                  "nameLocation": "1510:4:1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 69,
+                  "src": "1497:17:1",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 66,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1497:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1496:19:1"
+            },
+            "scope": 70,
+            "src": "1421:95:1",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 71,
+        "src": "267:1253:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1488:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.7+commit.e28d00a7.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-10-18T23:41:15.789Z",
+  "devdoc": {
+    "details": "Fully On-Chain File Access Interface -- Single file per token variant Interface for contracts which expose a single file for each of their tokens. Originally created for the NonagonCup.",
+    "kind": "dev",
+    "methods": {
+      "getFileChunk(uint256,uint256)": {
+        "details": "Use repeated calls to getFileChunk to get the binary data for the file.  -- Size of returned data for each fileChunk must be no more than 1024 bytes.  -- First fileChunk should be the file header, if the file format has one."
+      },
+      "getFileChunksTotal(uint256)": {
+        "details": "Each file has zero or more fileChunks."
+      },
+      "getFilename(uint256)": {
+        "details": "Each file must have a filename including the file extension, for example:  \"my-file-1.stl\" If the contract is an NFT where the object of the NFT is the exposed files then the filenames within the contract must be unique and must include the tokenId that they belong to."
+      },
+      "getFullFile(uint256)": {
+        "details": "Single call to get the full file contents. NB: This may not work in all conditions due to gas limits, it is instead recommended to call getFileChunksTotal and iterate calls to getFileChunk."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
